@@ -1,0 +1,4 @@
+area_id,name,population,severity,accessibility,lat,lon
+A1,Vaishali Nagar,150000,3,0.8,26.9110,75.7410
+A2,Mansarovar,180000,4,0.7,26.8460,75.7700
+A3,Johri Bazaar,70000,5,0.5,26.9230,75.8260

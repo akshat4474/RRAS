@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic>=2.0
+pandas
+networkx
+python-multipart
+streamlit
+folium
+requests
+streamlit-folium
+polyline

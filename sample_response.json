@@ -1,0 +1,49 @@
+{
+  "plan": {
+    "trips": [
+      {
+        "trip_id": "D1->A3",
+        "depot_id": "D1",
+        "area_id": "A3",
+        "path_nodes": ["D1", "A3"],
+        "total_km": 6.0,
+        "est_time_min": 12.0,
+        "food_units": 1050,
+        "water_units": 1400,
+        "med_kits": 60,
+        "priority_score": 10.45
+      },
+      {
+        "trip_id": "D2->A2",
+        "depot_id": "D2",
+        "area_id": "A2",
+        "path_nodes": ["D2", "A2"],
+        "total_km": 4.0,
+        "est_time_min": 8.0,
+        "food_units": 2430,
+        "water_units": 3240,
+        "med_kits": 48,
+        "priority_score": 9.45
+      },
+      {
+        "trip_id": "D1->A1",
+        "depot_id": "D1",
+        "area_id": "A1",
+        "path_nodes": ["D1", "A1"],
+        "total_km": 9.0,
+        "est_time_min": 18.0,
+        "food_units": 1800,
+        "water_units": 2400,
+        "med_kits": 36,
+        "priority_score": 7.1
+      }
+    ]
+  },
+  "allocate": {
+    "allocation_table": [
+      { "area_id": "A1", "food_units": 1800, "water_units": 2400, "med_kits": 36, "priority_score": 7.1 },
+      { "area_id": "A2", "food_units": 2430, "water_units": 3240, "med_kits": 48, "priority_score": 9.45 },
+      { "area_id": "A3", "food_units": 1050, "water_units": 1400, "med_kits": 60, "priority_score": 10.45 }
+    ]
+  }
+}

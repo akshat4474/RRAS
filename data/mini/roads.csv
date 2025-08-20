@@ -1,0 +1,8 @@
+edge_id,from_node,to_node,distance_km,is_blocked,risk_level
+e1,D1,A3,6.0,false,1
+e2,D1,A1,9.0,false,0
+e3,A3,A1,5.0,false,1
+e4,A1,A2,6.0,false,0
+e5,D2,A2,4.0,false,0
+e6,D2,A3,10.0,false,1
+e7,A2,A3,5.0,true,0
