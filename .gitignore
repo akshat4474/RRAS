@@ -158,6 +158,9 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # Data files (uncomment if you don't want to track large datasets)
+# Ignore all CSVs in data except mini
+data/*.csv
+!data/mini/*.csv
 # *.csv
 # *.json
 # data/large/
