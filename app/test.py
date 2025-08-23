@@ -9,25 +9,16 @@ import polyline
 from functools import lru_cache
 from datetime import timedelta
 
-# ---------------------------
-# Config
-# ---------------------------
 load_dotenv()
 API = os.getenv("API_URL", "http://localhost:8000")
 TIMEOUT = 60
 
-st.set_page_config(page_title="🚑 RRAS Dashboard", layout="wide")
+st.set_page_config(page_title="RRAS Dashboard", layout="wide")
 
-# ---------------------------
-# Session state
-# ---------------------------
 for key in ["route_result", "plan_result", "route_map_key", "route_map_html", "plan_map_key", "plan_map_html"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
-# ---------------------------
-# Helpers
-# ---------------------------
 def df_from_upload(f):
     if f is None:
         return pd.DataFrame()
@@ -47,11 +38,9 @@ def severity_color(sev: int):
     return {0:"green",1:"green",2:"lightblue",3:"blue",4:"orange",5:"red"}.get(int(sev), "blue")
 
 def transport_mode(sev:int):
-    """Assign transport mode based on severity"""
     return {0:"Bike",1:"Bike",2:"Van",3:"Truck",4:"Truck",5:"Helicopter"}.get(int(sev),"Truck")
 
 def speed_kmh(mode:str):
-    """Average speed per transport mode in km/h"""
     return {"Bike":20,"Van":40,"Truck":60,"Helicopter":150}.get(mode,40)
 
 def folium_base_map(node_coords, areas_df, depots_df):
@@ -215,10 +204,10 @@ def folium_plan_map_osrm(node_coords,areas_df,depots_df,trips):
 # ---------------------------
 # Sidebar
 # ---------------------------
-st.sidebar.title("⚙ Settings")
-areas_file=st.sidebar.file_uploader("📍 Areas CSV", type="csv")
-depots_file=st.sidebar.file_uploader("🏭 Depots CSV", type="csv")
-roads_file=st.sidebar.file_uploader("🛣 Roads CSV", type="csv")
+st.sidebar.title("Settings")
+areas_file=st.sidebar.file_uploader("Areas CSV", type="csv")
+depots_file=st.sidebar.file_uploader("Depots CSV", type="csv")
+roads_file=st.sidebar.file_uploader("Roads CSV", type="csv")
 st.sidebar.divider()
 st.sidebar.caption("API Health")
 try: st.sidebar.json(requests.get(f"{API}/health",timeout=5).json())
@@ -232,11 +221,11 @@ node_coords=make_node_coords(areas_df,depots_df)
 # ---------------------------
 # Tabs
 # ---------------------------
-tab1,tab2,tab3,tab4 = st.tabs(["📦 Allocation","🛣 Single Route","🗺 Full Plan","🧪 Scenario Simulation"])
+tab1,tab2,tab3,tab4 = st.tabs(["Allocation","Single Route","Full Plan","Scenario Simulation"])
 
 # --- Allocation ---
 with tab1:
-    st.subheader("📦 Predict Allocation")
+    st.subheader("Predict Allocation")
 
     # ML Model Integration will run only when button is pressed
     if st.button("Run Allocation", key="ml_alloc"):
@@ -303,7 +292,7 @@ with tab1:
 
 # --- Single Route ---
 with tab2:
-    st.subheader("🛣 Compute Single Route")
+    st.subheader("Compute Single Route")
     depot_options=depots_df["depot_id"].astype(str).tolist() if not depots_df.empty else []
     area_options=areas_df["area_id"].astype(str).tolist() if not areas_df.empty else []
     depot_node = st.selectbox("Depot ID", depot_options) if depot_options else None
@@ -333,14 +322,14 @@ with tab2:
                         st.session_state.route_map_key=route_key
                         m=folium_route_map_osrm(node_coords,areas_df,depots_df,path,sev=sev)
                         st.session_state.route_map_html=map_html(m)
-                    with st.expander("📍 Show Route Map", expanded=True):
+                    with st.expander("Show Route Map", expanded=True):
                         components.html(st.session_state.route_map_html,height=600)
                     row=pd.DataFrame([{"depot_id":depot_node,"area_id":area_node,"path":" -> ".join(path),"total_km":route_json.get("total_km"),"est_time_min":route_json.get("est_time_min"),"mode":transport_mode(sev)}])
             except Exception as e: st.error(f"Route failed: {e}")
 
 # --- Full Plan ---
 with tab3:
-    st.subheader("🗺 Generate Full Plan")
+    st.subheader("Generate Full Plan")
     if st.button("Run Full Plan", key="plan"):
         if areas_file is None or depots_file is None:
             st.warning("Upload both Areas and Depots CSV files")
@@ -409,14 +398,14 @@ with tab3:
                     })
                 m = folium_plan_map_osrm(node_coords, areas_df, depots_df, trips)
                 plan_map_html = map_html(m)
-                with st.expander("🗺 Show Full Plan Map", expanded=True):
+                with st.expander("Show Full Plan Map", expanded=True):
                     components.html(plan_map_html, height=600)
             except Exception as e:
                 st.warning(f"ML model not available: {e}")
 
 # --- Scenario Simulation ---
 with tab4:
-    st.subheader("🧪 Scenario Simulation Demo")
+    st.subheader("Scenario Simulation Demo")
     st.caption("Adjust parameters in the sidebar and click Simulate Scenario to see changes.")
     # Use uploaded CSVs if available, else fallback to demo data
     if areas_df.empty:

@@ -185,3 +185,5 @@ temp_files/
 
 models/allocation_ml_model.py
 models/improved_allocation_models.pkl
+app/app.py
+app/test_1.py
