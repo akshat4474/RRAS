@@ -9,3 +9,6 @@ folium
 requests
 streamlit-folium
 polyline
+python-dotenv
+joblib
+numpy
