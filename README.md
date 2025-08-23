@@ -31,7 +31,7 @@ README.md
 2. **Clone the repo:**
   ```sh
   git clone https://github.com/akshat4474/RRAS.git
-  cd IIC2.0/RRAS
+  cd RRAS
   ```
 3. **Create and activate a virtual environment:**
   ```sh
