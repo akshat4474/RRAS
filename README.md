@@ -2,6 +2,8 @@
 
 # 🚑 RRAS — Relief Routing & Allocation System
 
+**Prototype Notice:** This app is an early-stage prototype developed for a competition. Features and results may be incomplete, inaccurate, or subject to change.
+
 ## What is RRAS?
 RRAS is an emergency resource planning and routing system for disaster relief. It combines AI-based allocation and smart routing to help relief teams deliver food, water, and medicine efficiently.
 
@@ -114,8 +116,7 @@ scripts\test_api.bat
 - Drone route planning
 - ML-based disaster demand prediction
 
----
 **Quick Demo:**
+
 1. Upload sample CSVs from `data/mini/`
 2. Click to run allocation and routing
-3. View results on map
