@@ -182,3 +182,6 @@ secrets.json
 # Custom project specific
 sample_uploads/
 temp_files/
+
+models/allocation_ml_model.py
+models/improved_allocation_models.pkl
