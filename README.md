@@ -8,7 +8,7 @@ RRAS is an emergency resource planning and routing system for disaster relief. I
 ### Key Features
 - Predicts resource demand for each area using ML
 - Calculates shortest, safest delivery routes (avoids blocked roads)
-- Interactive dashboard: upload data, view maps, download results
+-- Interactive dashboard: upload data, view maps
 - Scenario simulation: adjust parameters, see impact live
 
 ## Project Structure
@@ -79,7 +79,7 @@ scripts\test_api.bat
 1. **Upload CSVs:** areas.csv, depots.csv, roads.csv
 2. **Run allocation:** ML model predicts food, water, medicine for each area
 3. **Run routing:** Calculates shortest/safest route from depot to area
-4. **View results:** Interactive map, downloadable tables
+4. **View results:** Interactive map
 5. **Scenario simulation:** Adjust parameters, see live impact
 
 ## Data Format
@@ -118,4 +118,4 @@ scripts\test_api.bat
 **Quick Demo:**
 1. Upload sample CSVs from `data/mini/`
 2. Click to run allocation and routing
-3. View results on map and download tables
+3. View results on map

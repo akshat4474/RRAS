@@ -120,9 +120,6 @@ def map_html(m):
     except AttributeError:
         return m._repr_html_()    # Fallback for older Folium versions
 
-def download_btn(df,label,filename,key):
-    if df is None or df.empty: return
-    st.download_button(label=label, data=df.to_csv(index=False).encode("utf-8"), file_name=filename, mime="text/csv", key=key, type="secondary")
 
 def files_bytes(**named_files):
     out = {}
@@ -299,7 +296,6 @@ with tab1:
                     })
                 df_results = pd.DataFrame(results)
                 st.dataframe(df_results, use_container_width=True)
-                download_btn(df_results, "⬇ Download ML Allocation", "ml_allocation_table.csv", "dl_ml_alloc")
             except Exception as e:
                 st.warning(f"ML model not available: {e}")
 
@@ -340,7 +336,6 @@ with tab2:
                     with st.expander("📍 Show Route Map", expanded=True):
                         components.html(st.session_state.route_map_html,height=600)
                     row=pd.DataFrame([{"depot_id":depot_node,"area_id":area_node,"path":" -> ".join(path),"total_km":route_json.get("total_km"),"est_time_min":route_json.get("est_time_min"),"mode":transport_mode(sev)}])
-                    download_btn(row,"⬇ Download Route","route_table.csv","dl_route_single")
             except Exception as e: st.error(f"Route failed: {e}")
 
 # --- Full Plan ---
@@ -403,7 +398,6 @@ with tab3:
                     })
                 df_results = pd.DataFrame(results)
                 st.dataframe(df_results, use_container_width=True)
-                download_btn(df_results, "⬇ Download ML Full Plan", "ml_full_plan_table.csv", "dl_ml_full_plan")
 
                 # Generate trips for plan map (one trip per area from depot)
                 trips = []
