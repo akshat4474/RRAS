@@ -105,9 +105,9 @@ def folium_base_map(node_coords, areas_df, depots_df):
 
 def map_html(m): 
     try:
-        return m.get_root().render()  # Newer Folium versions
+        return m.get_root().render()
     except AttributeError:
-        return m._repr_html_()    # Fallback for older Folium versions
+        return m._repr_html_()
 
 
 def files_bytes(**named_files):
@@ -197,9 +197,6 @@ def folium_plan_map_osrm(node_coords,areas_df,depots_df,trips):
                         tooltip=f"Trip {trip.get('trip_id','')} | Mode: {mode} | ETA: {eta_min} min").add_to(m)
     return m
 
-# ---------------------------
-# Sidebar
-# ---------------------------
 st.sidebar.title("Settings")
 areas_file=st.sidebar.file_uploader("Areas CSV", type="csv")
 depots_file=st.sidebar.file_uploader("Depots CSV", type="csv")
@@ -214,15 +211,10 @@ depots_df=df_from_upload(depots_file)
 roads_df=df_from_upload(roads_file)
 node_coords=make_node_coords(areas_df,depots_df)
 
-# ---------------------------
-# Tabs
-# ---------------------------
 tab1,tab2,tab3,tab4 = st.tabs(["Allocation","Single Route","Full Plan","Scenario Simulation"])
 
 with tab1:
     st.subheader("Predict Allocation")
-
-    # ML Model Integration will run only when button is pressed
     if st.button("Run Allocation", key="ml_alloc"):
         if areas_file is None or depots_file is None:
             st.warning("Upload both Areas and Depots CSV files")

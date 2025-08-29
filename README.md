@@ -9,8 +9,8 @@ RRAS is an emergency resource planning and routing system for disaster relief. I
 
 ### Key Features
 - Predicts resource demand for each area using ML
-- Calculates shortest, safest delivery routes (avoids blocked roads)
--- Interactive dashboard: upload data, view maps
+- Calculates shortest, safest delivery routes
+- Interactive dashboard: upload data, view maps
 - Scenario simulation: adjust parameters, see impact live
 
 ## Project Structure
