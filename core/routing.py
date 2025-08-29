@@ -11,9 +11,7 @@ def build_graph(roads_df: pd.DataFrame, alpha: float = 1.0):
     """
     G = nx.DiGraph()
     req = {"from_node","to_node","distance_km","is_blocked","risk_level"}
-    # roads.csv in your data uses these column names already
     if not req.issubset(roads_df.columns):
-        # try alternative header set (edge_id, from_node, to_node, ...)
         req_alt = {"edge_id","from_node","to_node","distance_km","is_blocked","risk_level"}
         if not req_alt.issubset(roads_df.columns):
             raise ValueError("roads.csv missing required columns.")
@@ -24,7 +22,6 @@ def build_graph(roads_df: pd.DataFrame, alpha: float = 1.0):
         blocked = bool(r.get("is_blocked", False))
         w = INF if blocked else d + alpha * risk
         G.add_edge(u, v, dist=d, risk=risk, blocked=blocked, weight=w)
-        # assume bidirectional unless your data says otherwise
         G.add_edge(v, u, dist=d, risk=risk, blocked=blocked, weight=w)
     return G
 

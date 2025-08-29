@@ -147,19 +147,16 @@ def folium_route_map_osrm(node_coords,areas_df,depots_df,path_nodes,sev=None):
         coords_seq=osrm_path_for_nodes(path_nodes,node_coords)
         mode = transport_mode(sev) if sev is not None else "Truck"
         speed = speed_kmh(mode)
-        # compute ETA for each segment
         total_distance = 0
         for i in range(len(coords_seq)-1):
             lat1,lon1 = coords_seq[i]
             lat2,lon2 = coords_seq[i+1]
-            # Haversine distance
             from math import radians, cos, sin, asin, sqrt
             def haversine(lat1,lon1,lat2,lon2):
                 R = 6371
                 dlat = radians(lat2-lat1)
                 dlon = radians(lon2-lon1)
                 a = sin(dlat/2)*2 + cos(radians(lat1))*cos(radians(lat2))*sin(dlon/2)*2
-                # Clamp 'a' to valid range [0, 1] to avoid math domain errors
                 a = max(0, min(1, a))
                 c = 2*asin(sqrt(a))
                 return R*c
@@ -187,7 +184,6 @@ def folium_plan_map_osrm(node_coords,areas_df,depots_df,trips):
             dlat = radians(lat2-lat1)
             dlon = radians(lon2-lon1)
             a = sin(dlat/2)*2 + cos(radians(lat1))*cos(radians(lat2))*sin(dlon/2)*2
-            # Clamp 'a' to valid range [0, 1] to avoid math domain errors
             a = max(0, min(1, a))
             c = 2*asin(sqrt(a))
             return R*c
@@ -223,7 +219,6 @@ node_coords=make_node_coords(areas_df,depots_df)
 # ---------------------------
 tab1,tab2,tab3,tab4 = st.tabs(["Allocation","Single Route","Full Plan","Scenario Simulation"])
 
-# --- Allocation ---
 with tab1:
     st.subheader("Predict Allocation")
 
@@ -256,7 +251,6 @@ with tab1:
                         if dist < min_dist:
                             min_dist = dist
                             nearest_depot = depot
-                    # Prepare features for prediction (must match model training)
                     features = {
                         'depot_capacity': nearest_depot['capacity_food'] + nearest_depot['capacity_water'] + nearest_depot['capacity_meds'],
                         'depot_food': nearest_depot['capacity_food'],
@@ -288,7 +282,6 @@ with tab1:
             except Exception as e:
                 st.warning(f"ML model not available: {e}")
 
-    # ...existing code...
 
 # --- Single Route ---
 with tab2:
@@ -307,11 +300,9 @@ with tab2:
                 route_json=r.json().get("route",{})
                 st.json(route_json)
                 path=route_json.get("path_nodes",[])
-                
-                # Fixed severity lookup - compare area_id as strings
-                sev = 3  # default severity
+
+                sev = 3
                 if not areas_df.empty and area_node:
-                    # Convert both to strings for comparison
                     matching_rows = areas_df[areas_df["area_id"].astype(str) == str(area_node)]
                     if not matching_rows.empty:
                         sev = int(matching_rows["severity"].iloc[0])
@@ -358,7 +349,6 @@ with tab3:
                         if dist < min_dist:
                             min_dist = dist
                             nearest_depot = depot
-                    # Prepare features for prediction (must match model training)
                     features = {
                         'depot_capacity': nearest_depot['capacity_food'] + nearest_depot['capacity_water'] + nearest_depot['capacity_meds'],
                         'depot_food': nearest_depot['capacity_food'],
@@ -387,8 +377,6 @@ with tab3:
                     })
                 df_results = pd.DataFrame(results)
                 st.dataframe(df_results, use_container_width=True)
-
-                # Generate trips for plan map (one trip per area from depot)
                 trips = []
                 for row in results:
                     trips.append({
@@ -407,7 +395,6 @@ with tab3:
 with tab4:
     st.subheader("Scenario Simulation Demo")
     st.caption("Adjust parameters in the sidebar and click Simulate Scenario to see changes.")
-    # Use uploaded CSVs if available, else fallback to demo data
     if areas_df.empty:
         areas = [
             {"area_id": "A1", "name": "Vaishali Nagar", "population": 150000, "severity": 3, "accessibility": 0.8},
@@ -435,12 +422,10 @@ with tab4:
         depot["capacity_water"] = st.sidebar.number_input(f"Water Capacity ({depot['depot_id']})", min_value=1000, max_value=50000, value=int(depot["capacity_water"]), step=500)
         depot["capacity_meds"] = st.sidebar.number_input(f"Medkits Capacity ({depot['depot_id']})", min_value=500, max_value=30000, value=int(depot["capacity_meds"]), step=500)
     if st.button("Simulate Scenario", key="scenario_sim"):
-        # Use mini/roads.csv for demo if no upload
         import pandas as pd, os
         if roads_df.empty:
             roads_path = os.path.join(os.path.dirname(__file__), "..", "data", "mini", "roads.csv")
             roads_df = pd.read_csv(roads_path)
-        # Build graph from roads.csv (custom Dijkstra)
         graph = {}
         for _, row in roads_df.iterrows():
             if str(row.get('is_blocked','')).lower() == 'true':
@@ -449,7 +434,6 @@ with tab4:
             dist = float(row['distance_km'])
             graph.setdefault(a, []).append((b, dist))
             graph.setdefault(b, []).append((a, dist))
-        # ML allocation
         import joblib
         ml_model_path = os.path.join(os.path.dirname(__file__), "..", "models", "best_allocation_model.pkl")
         try:
@@ -518,13 +502,11 @@ with tab4:
                     "accessibility": area["accessibility"],
                     "distance_to_depot": min_dist
                 })
-            # Show verification table for ML input features
             st.subheader("ML Model Input Data (from sliders)")
             st.dataframe(pd.DataFrame(features_used), use_container_width=True)
             df_results = pd.DataFrame(results)
             st.subheader("Simulated ML Allocation Results")
             st.dataframe(df_results, use_container_width=True)
-            # Folium map logic
             coords = {
                 "D1": (26.9860, 75.8240),
                 "D2": (26.7920, 75.8770),
